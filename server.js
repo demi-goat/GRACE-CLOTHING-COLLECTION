@@ -1,9 +1,9 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
 require('dotenv').config();
 
+const connectDB = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 
 const app = express();
@@ -22,11 +22,16 @@ app.get('/', (req, res) => {
 });
 
 // Connect to MongoDB & Start server
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('✅ MongoDB connected');
+const startServer = async () => {
+  try {
+    await connectDB();
     app.listen(process.env.PORT, () => {
       console.log(`✅ Server running on port ${process.env.PORT}`);
     });
-  })
-  .catch(err => console.error('❌ MongoDB connection error:', err));
+  } catch (error) {
+    console.error('❌ Server startup error:', error);
+    process.exit(1);
+  }
+};
+
+startServer();

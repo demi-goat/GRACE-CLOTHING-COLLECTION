@@ -61,4 +61,13 @@ const loginUser = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser };
+// TEST AUTH
+const testAuth = async (req, res) => {
+    try {
+        res.json({ message: "Auth route is working!" });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+module.exports = { registerUser, loginUser, testAuth };
